@@ -14,6 +14,11 @@ load_dotenv()
 # Configure the API key
 GOOGLE_API_KEY=os.environ['GOOGLE_API_KEY']
 
+# Set the model to Gemini 1.5 Pro.
+model = genai.GenerativeModel(model_name="models/gemini-1.5-pro-latest")
+
+path = "frontend/src/Components/Files/video.webm"
+
 genai.configure(api_key=GOOGLE_API_KEY)
 #----------------------------------------------
 class File:
@@ -34,7 +39,7 @@ def split_audio_video(video_file_path):
 
     # Extract the audio
     audio_clip = video_clip.audio
-    audio_file_path = "extracted_audio.wav"  # Choose your desired audio format and filename
+    audio_file_path = "extracted_audio.mp3"  # Choose your desired audio format and filename
     audio_clip.write_audiofile(audio_file_path)
 
     # Save the video without audio (optional)
@@ -45,14 +50,17 @@ def split_audio_video(video_file_path):
     return audio_file_path, video_file_path_no_audio
 
 # Create or cleanup existing extracted image frames directory.
-FRAME_EXTRACTION_DIRECTORY = "/content/frames"
-FRAME_PREFIX = "_frame"
+FRAME_EXTRACTION_DIRECTORY = "backend/extracted_frames"
+FRAME_PREFIX = "AT_TIME"
 def create_frame_output_dir(output_dir):
   if not os.path.exists(output_dir):
     os.makedirs(output_dir)
   else:
     shutil.rmtree(output_dir)
     os.makedirs(output_dir)
+
+
+
 
 def extract_frame_from_video(video_file_path):
   print(f"Extracting {video_file_path} at 1 frame per second. This might take a bit...")
@@ -88,6 +96,19 @@ def get_timestamp(filename):
       return None  # Indicates the filename might be incorrectly formatted
   return parts[1].split('.')[0]
 
+# actual extraction of frames:
+audiopath, videopath = split_audio_video(path)
+audiopathfile = genai.upload_file(path="extracted_audio.mp3")
+
+question = ""
+promptaudio = "This audio is a response to this interview question:" + question + "." + "Give some pros and cons about it."
+response_audio = model.generate_content([promptaudio, audiopathfile])
+print(response_audio.text)
+extract_frame_from_video(videopath)
+
+
+#-----------------------------
+
 # Process each frame in the output directory
 files = os.listdir(FRAME_EXTRACTION_DIRECTORY)
 files = sorted(files)
@@ -109,3 +130,27 @@ for file in files_to_upload if full_video else files_to_upload[40:50]:
   response = genai.upload_file(path=file.file_path)
   file.set_file_response(response)
   uploaded_files.append(file)
+
+# List files uploaded in the API
+for n, f in zip(range(len(uploaded_files)), genai.list_files()):
+  print(f.uri)
+
+prompt1 = "The following images are frames in a video that is a response to an interview question. "
+prompt2 = "Analyze the interviewee's facial expressions throughout the frames and give pros and cons about it."
+
+prompt = prompt1 + prompt2
+
+# Make GenerateContent request with the structure described above.
+def make_request(prompt, files):
+  request = [prompt]
+  for file in files:
+    request.append(file.timestamp)
+    request.append(file.response)
+  return request
+
+
+# Make the LLM request.
+request = make_request(prompt, uploaded_files)
+response = model.generate_content(request, request_options={"timeout": 1000})
+print(response.text)
+
