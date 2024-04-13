@@ -11,7 +11,7 @@
 /bin/
 /build/
 /dist/
-/venv/
+/backend/venv/
 
 # Ignore package manager directories
 /node_modules/
