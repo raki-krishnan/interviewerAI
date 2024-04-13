@@ -34,3 +34,7 @@ secrets.txt
 
 #Ignore a.out
 a.out
+
+#env
+env-mhacks/
+.env 
