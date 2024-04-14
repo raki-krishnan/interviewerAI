@@ -146,9 +146,3 @@ def master_function(question, MOVpath):
   response_video = model.generate_content(request, request_options={"timeout": 1000})
   feedbackResponses.append(response_video)
   return feedbackResponses
-
-answer = []
-answer = master_function("What is your biggest weakness?", "/home/shreyanp/projects/mhacks/frontend/src/Components/Files/IMG_4184.mov")
-
-print(answer[0].text)
-print(answer[1].text)
