@@ -3,7 +3,7 @@ Welcome to InterviewerAI, a project designed to help users improve their intervi
 
 
 ## Inspiration
-Early on, we realized that Gemini had a very accurate ability to recognize facial expressions. We took 3 pictures of each other, one super sad, one neutral, and one happy. Gemini accurately described the expressions and properly ranked them 1-10 with 1 being sad and 10 being happy. We went down this hole and realized that it is hard to get interview feedback that incorporates visual elements. Currently, interview AI tools only provide feedback on what was said, but not anything to do with facial expressions.
+We realized that Gemini had a very accurate ability to recognize facial expressions, and wanted to explore innovative ways to apply this. As college students who often need to hone our interviewing skills, we wanted to explore a way to make this process easier to tackle and more enjoyable. While there are interview assistent applications out there, none of them are able to provide specific, tailored feedback based on both speech and facial expressions.
 
 ## What it does
 Given a job title, company, and a question a user wants to answer, we allow the user to record a response. InterviewerAI will then parse the video frame by frame and separate the audio. We feed these components in individually and ask Gemini to provide feedback on them in the context of the given role, company, and question.
@@ -21,10 +21,10 @@ Full-stack development, integrating the use of the Gemini API.
 Continue building, innovating, and optimizing!
 
 ## Built With
-- CSS
 - Gemini
 - JavaScript
 - Python
+- CSS
 - VSCode
 
 
