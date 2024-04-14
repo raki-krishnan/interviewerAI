@@ -100,13 +100,16 @@ def get_timestamp(filename):
 def master_function(question, MOVpath, jobTitle, companyName):
   model = genai.GenerativeModel(model_name="models/gemini-1.5-pro-latest", system_instruction="Your task is to give feedback to a candidate"
                                 " who is applying for the " + jobTitle + "position at " + companyName + ". Please use what you know about this company" + 
-                                " and the role to give specific feedback. Thank you!")
+                                " and the role to give specific feedback." +
+                                " Pretend you are talking directly to the interviewee (i.e. use \"you\" rather than \"the candidate\". Thank you!" +
+                                " Only output sentences, I don't want *s or #s in your response.")
   feedbackResponses = []
   # actual extraction of frames:
   audiopath, videopath = split_audio_video(MOVpath)
   audiopathfile = genai.upload_file(path="extracted_audio.mp3")
 
-  promptaudio = "This audio is a response to this interview question:" + question + "." + "Please give some pros and cons about it within 4 sentences. Thank you!"
+  promptaudio = "This audio is a response to this interview question:" + question + "." 
+  "Please give some pros and cons about it within 4 sentences. Just give me plain text, no labels. Thank you!"
   response_audio = model.generate_content([promptaudio, audiopathfile])
   extract_frame_from_video(videopath)
 
@@ -135,7 +138,7 @@ def master_function(question, MOVpath, jobTitle, companyName):
     uploaded_files.append(file)
 
   prompt1 = "The following images are frames in a video that is a response to an interview question. "
-  prompt2 = "Analyze the interviewee's facial expressions throughout the frames and give pros and cons about it in 4 sentences."
+  prompt2 = "Analyze the interviewee's facial expressions throughout the frames and give pros and cons about it in 4 sentences. Thank you!"
   prompt = prompt1 + prompt2
 
   # Make GenerateContent request with the structure described above.

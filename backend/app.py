@@ -16,7 +16,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 UPLOAD_FOLDER = 'uploaded_videos'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-shreyan = {"question": "", "path": ""}
+shreyan = {"question": "", "path": "", "company": "", "role": ""}
 
 @app.route('/videos/<filename>/')
 def uploaded_file(filename):
@@ -29,9 +29,10 @@ def get_feedback():
         "feedback1": "Audio feedback...",
         "feedback2": "Facial expression feedback..."
     }
-    response_array = master_function(shreyan["question"], shreyan["path"])
-    feedback["feedback1"] = response_array[0].text
-    feedback["feedback2"] = response_array[1].text
+    response_array = master_function(shreyan["question"], shreyan["path"], shreyan["role"], shreyan["company"])
+    feedback["feedback1"] = '#' + response_array[0].text
+    feedback["feedback2"] = '#' + response_array[1].text
+    print(f"Feedback: {feedback}")
     return jsonify(feedback)
 
 @app.route('/upload-video/', methods=['POST'])
@@ -79,6 +80,41 @@ def submit_question():
         "question": question
     }
     return jsonify(question_json), 200
+
+@app.route('/submit-company/', methods=['POST'])
+def submit_company():
+    print("Received request: ", request)
+    try: 
+        data = json.loads(request.data)
+    except Exception as e:
+        print("Error: ", e)
+    
+    question = data.get('question')
+    shreyan["company"] = question
+    print(f"Company received: {question}")
+    question_json = {
+        "message": "Company received",
+        "question": question
+    }
+    return jsonify(question_json), 200
+
+@app.route('/submit-role/', methods=['POST'])
+def submit_role():
+    print("Received request: ", request)
+    try: 
+        data = json.loads(request.data)
+    except Exception as e:
+        print("Error: ", e)
+    
+    question = data.get('question')
+    shreyan["role"] = question
+    print(f"Question received: {question}")
+    question_json = {
+        "message": "Role received",
+        "question": question
+    }
+    return jsonify(question_json), 200
+
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>/')
