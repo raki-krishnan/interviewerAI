@@ -42,3 +42,19 @@
     color: #333;
     opacity: 0.5;
 }
+
+.submit-button {
+    padding: 10px 15px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100px; /* Fixed width for the button */
+  }
+  
+  .submit-button:hover {
+    background-color: #0056b3;
+  }

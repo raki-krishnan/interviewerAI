@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Feedback.css';
 
 function Feedback() {
@@ -7,6 +8,7 @@ function Feedback() {
   const [isTyping1, setIsTyping1] = useState(false);
   const [isTyping2, setIsTyping2] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   const typeFeedback = (feedback, setFeedback, setIsTyping, callback) => {
     let index = 0;
@@ -48,6 +50,10 @@ function Feedback() {
       });
   }, []);
 
+  function handleSubmit() {
+    navigate('/Role/');
+  }
+
   return (
     <div className="feedback-container">
       <video controls src="/videos/converted_video.mov" alt="Interview video" className="feedback-video">
@@ -63,6 +69,7 @@ function Feedback() {
             <p className={`typing-effect ${isTyping2 ? "typing" : ""}`}>{feedback2}</p>
           </>
         )}
+        <button onClick={handleSubmit} className="submit-button">Restart</button>
       </div>
     </div>
   );

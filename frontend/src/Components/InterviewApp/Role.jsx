@@ -49,7 +49,7 @@ function RoleInput() {
           <input
             type="text"
             className="question-input"
-            placeholder="Enter your question here"
+            placeholder="Enter your role here"
             value={question}
             onChange={e => setQuestion(e.target.value)}
             onKeyDown={handleKeyPress}

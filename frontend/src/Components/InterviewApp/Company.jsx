@@ -49,7 +49,7 @@ function CompanyInput() {
           <input
             type="text"
             className="question-input"
-            placeholder="Enter your question here"
+            placeholder="Enter your company here"
             value={question}
             onChange={e => setQuestion(e.target.value)}
             onKeyDown={handleKeyPress}
