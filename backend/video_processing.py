@@ -17,7 +17,9 @@ GOOGLE_API_KEY=os.environ['GOOGLE_API_KEY']
 # Set the model to Gemini 1.5 Pro.
 model = genai.GenerativeModel(model_name="models/gemini-1.5-pro-latest")
 
-path = "frontend/src/Components/Files/video.webm"
+#path = "/home/shreyanp/projects/mhacks/frontend/src/Components/Files/IMG_4184.mov"
+
+#attempt to convert from WEBM to MP4
 
 genai.configure(api_key=GOOGLE_API_KEY)
 #----------------------------------------------
@@ -96,61 +98,57 @@ def get_timestamp(filename):
       return None  # Indicates the filename might be incorrectly formatted
   return parts[1].split('.')[0]
 
-# actual extraction of frames:
-audiopath, videopath = split_audio_video(path)
-audiopathfile = genai.upload_file(path="extracted_audio.mp3")
+def master_function(question, MOVpath):
+  feedbackResponses = []
+  # actual extraction of frames:
+  audiopath, videopath = split_audio_video(MOVpath)
+  audiopathfile = genai.upload_file(path="extracted_audio.mp3")
 
-question = ""
-promptaudio = "This audio is a response to this interview question:" + question + "." + "Give some pros and cons about it."
-response_audio = model.generate_content([promptaudio, audiopathfile])
-print(response_audio.text)
-extract_frame_from_video(videopath)
+  promptaudio = "This audio is a response to this interview question:" + question + "." + "Please give some pros and cons about it. Thank you!"
+  response_audio = model.generate_content([promptaudio, audiopathfile])
+  extract_frame_from_video(videopath)
 
+  feedbackResponses.append(response_audio)
 
-#-----------------------------
+  #-----------------------------
 
-# Process each frame in the output directory
-files = os.listdir(FRAME_EXTRACTION_DIRECTORY)
-files = sorted(files)
-files_to_upload = []
-for file in files:
-  files_to_upload.append(
-      File(file_path=os.path.join(FRAME_EXTRACTION_DIRECTORY, file)))
-
-# Upload the files to the API
-# Only upload a 10 second slice of files to reduce upload time.
-# Change full_video to True to upload the whole video.
-full_video = True
-
-uploaded_files = []
-print(f'Uploading {len(files_to_upload) if full_video else 10} files. This might take a bit...')
-
-for file in files_to_upload if full_video else files_to_upload[40:50]:
-  print(f'Uploading: {file.file_path}...')
-  response = genai.upload_file(path=file.file_path)
-  file.set_file_response(response)
-  uploaded_files.append(file)
-
-# List files uploaded in the API
-for n, f in zip(range(len(uploaded_files)), genai.list_files()):
-  print(f.uri)
-
-prompt1 = "The following images are frames in a video that is a response to an interview question. "
-prompt2 = "Analyze the interviewee's facial expressions throughout the frames and give pros and cons about it."
-
-prompt = prompt1 + prompt2
-
-# Make GenerateContent request with the structure described above.
-def make_request(prompt, files):
-  request = [prompt]
+  # Process each frame in the output directory
+  files = os.listdir(FRAME_EXTRACTION_DIRECTORY)
+  files = sorted(files)
+  files_to_upload = []
   for file in files:
+    files_to_upload.append(
+        File(file_path=os.path.join(FRAME_EXTRACTION_DIRECTORY, file)))
+
+  # Upload the files to the API
+  # Only upload a 10 second slice of files to reduce upload time.
+  # Change full_video to True to upload the whole video.
+  full_video = True
+  uploaded_files = []
+  print(f'Uploading {len(files_to_upload) if full_video else 10} files. This might take a bit...')
+  for file in files_to_upload if full_video else files_to_upload[40:50]:
+    print(f'Uploading: {file.file_path}...')
+    response = genai.upload_file(path=file.file_path)
+    file.set_file_response(response)
+    uploaded_files.append(file)
+
+  prompt1 = "The following images are frames in a video that is a response to an interview question. "
+  prompt2 = "Analyze the interviewee's facial expressions throughout the frames and give pros and cons about it."
+  prompt = prompt1 + prompt2
+
+  # Make GenerateContent request with the structure described above.
+
+  request = [prompt]
+  for file in uploaded_files:
     request.append(file.timestamp)
     request.append(file.response)
-  return request
 
+  response_video = model.generate_content(request, request_options={"timeout": 1000})
+  feedbackResponses.append(response_video)
+  return feedbackResponses
 
-# Make the LLM request.
-request = make_request(prompt, uploaded_files)
-response = model.generate_content(request, request_options={"timeout": 1000})
-print(response.text)
+answer = []
+answer = master_function("What is your biggest weakness?", "/home/shreyanp/projects/mhacks/frontend/src/Components/Files/IMG_4184.mov")
 
+print(answer[0].text)
+print(answer[1].text)
