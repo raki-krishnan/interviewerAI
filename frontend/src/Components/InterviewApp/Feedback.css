@@ -1,0 +1,44 @@
+.feedback-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 20px;
+    height: 100vh;
+    background: linear-gradient(to top, #1185f2, #ffffff);
+  }
+  
+  .feedback-video {
+    width: 35%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  .feedback-messages {
+    width: 45%;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    }
+
+.typing-effect {
+    padding-right: 3px;
+}
+
+.typing {
+    animation: typing 2s steps(80, end);
+}
+
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
+
+/* @keyframes blink-caret {
+50% { border-color: transparent }
+} */
+.loading-message {
+    font-size: 20px;
+    color: #333;
+    opacity: 0.5;
+}

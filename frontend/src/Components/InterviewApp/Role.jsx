@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Question.css';
+import './Role.css';
 
-function QuestionInput() {
+function RoleInput() {
   const [question, setQuestion] = useState('');
   const navigate = useNavigate();
 
   function handleSubmit() {
     if (!question) {
-      alert('Please enter a question.');
+      alert('Please enter a role.');
       return;
     }
   
-    fetch('http://localhost:4000/submit-question/', {
+    fetch('http://localhost:4000/submit-role/', {
       method: 'POST',
     //   mode: 'no-cors',
       headers: {
@@ -28,10 +28,10 @@ function QuestionInput() {
     })
     .then(data => {
       console.log(data); // Handle the data from the response
-      navigate('/InterviewApp/');
+      navigate('/Company/');
     })
     .catch(error => {
-      console.error('Error submitting question:', error);
+      console.error('Error submitting role:', error);
     });
   }
 
@@ -44,7 +44,7 @@ function QuestionInput() {
   return (
     <div className="container">
       <div className="question-container">
-        <h2 className="question-prompt">What question are you going to answer?</h2>
+        <h2 className="question-prompt">What role are you applying to?</h2>
         <div className="input-group">
           <input
             type="text"
@@ -61,4 +61,4 @@ function QuestionInput() {
   );
 }
 
-export default QuestionInput;
+export default RoleInput;

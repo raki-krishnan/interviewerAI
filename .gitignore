@@ -11,10 +11,10 @@
 /bin/
 /build/
 /dist/
-/backend/venv/
+/venv/
+/frontend/node_modules/
 
 # Ignore package manager directories
-/node_modules/
 /vendor/
 
 # Ignore log files

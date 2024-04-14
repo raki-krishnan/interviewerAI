@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './InterviewApp.css';
 
 function VideoRecorder() {
@@ -7,6 +8,7 @@ function VideoRecorder() {
   const mediaRecorderRef = useRef(null);
   const videoRef = useRef(null);
   const streamRef = useRef(null);
+  const navigate = useNavigate();
 
   const startCamera = async () => {
     try {
@@ -54,13 +56,40 @@ function VideoRecorder() {
     setRecording(false);
   };
 
-  const handleSubmit = async () => {
-    console.log('Submit the video here...');
-    // Add the code to upload the video to your backend here.
-    // After submitting, you can reset the videoURL to null to remove the playback video
-    setVideoURL(null);
-    startCamera();
+  const handleSubmit = () => {
+    if (!videoURL) {
+      alert('No video to submit.');
+      return;
+    }
+
+    fetch(videoURL)
+      .then(response => response.blob())
+      .then(videoBlob => {
+        const formData = new FormData();
+        formData.append('file', videoBlob, 'video.webm');
+        return fetch('http://localhost:4000/upload-video/', {
+          method: 'POST',
+          body: formData,
+        });
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log(data); 
+        setVideoURL(null); 
+        navigate('/Feedback/');
+        console.log('Video submitted successfully:', data);
+        console.log('Navigating to feedback page...');
+      })
+      .catch(error => {
+        console.error('Error submitting video:', error);
+      });
   };
+  
 
   return (
     <div className = "container">

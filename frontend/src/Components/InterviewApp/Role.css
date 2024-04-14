@@ -1,0 +1,57 @@
+.container {
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(to top, #ffffff, #1185f2);
+}
+
+.question-container {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* This will take up the full viewport height */
+  font-family: 'Arial', sans-serif;
+}
+
+.question-prompt {
+  margin-bottom: 20px;
+  color: #333; /* Dark grey text */
+  font-size: 1.5rem; /* Larger font size for the prompt */
+}
+
+.question-input {
+  padding: 10px 15px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ddd; /* Light grey border */
+  width: calc(100% - 100px); /* Adjust width to leave space for button */
+  max-width: 400px; /* Adjust the max width to fit with the button */
+}
+
+.question-input:focus {
+  outline: none;
+  border-color: #0056b3; 
+  box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
+}
+.input-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Adjust the space between the input and button */
+}
+
+.submit-button {
+  padding: 10px 15px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100px; /* Fixed width for the button */
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
