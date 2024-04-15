@@ -1,7 +1,7 @@
 # InterviewerAI
 Welcome to InterviewerAI, a project designed to help users improve their interviewing skills using artificial intelligence.
 
-# Walkthrough video link
+## Walkthrough video link
 https://youtu.be/jbIMK_gJ4rA
 
 ## Inspiration
