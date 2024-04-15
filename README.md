@@ -1,6 +1,8 @@
 # InterviewerAI
 Welcome to InterviewerAI, a project designed to help users improve their interviewing skills using artificial intelligence.
 
+# Walkthrough video link
+https://youtu.be/jbIMK_gJ4rA
 
 ## Inspiration
 We realized that Gemini had a very accurate ability to recognize facial expressions, and wanted to explore innovative ways to apply this. As college students who often need to hone our interviewing skills, we wanted to explore a way to make this process easier to tackle and more enjoyable. While there are interview assistent applications out there, none of them are able to provide specific, tailored feedback based on both speech and facial expressions.
